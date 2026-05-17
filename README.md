@@ -41,14 +41,14 @@ php seed.php
 3. Start the built-in PHP server if you want a quick local preview:
 
 ```bash
-php -S localhost:8080 router.php
+php -S localhost:8000 router.php
 ```
 
-4. Open `http://localhost:8080/login` in your browser.
+4. Open `http://localhost:8000/login` in your browser.
 
 Do not open `http://login/`. That is not a valid local URL and will fail with `ERR_NAME_NOT_RESOLVED`.
 
-On Windows, you can also double-click `run.bat`, which starts a clean server on port `8080` and opens the correct login page automatically.
+On Windows, you can also double-click `run.bat`, which starts a clean server on port `8000` and opens the correct login page automatically.
 
 ## XAMPP Option
 

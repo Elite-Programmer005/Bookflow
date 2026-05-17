@@ -44,40 +44,40 @@ $bookings = fetch_all_bookings();
 $pageTitle = 'Admin Dashboard';
 require __DIR__ . '/../templates/header.php';
 ?>
-<div class="grid gap-8 lg:grid-cols-[260px_1fr]">
-    <aside class="rounded-[2rem] bg-slate-900 p-6 text-white shadow-2xl shadow-slate-300/40">
+<div class="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
+    <aside class="rounded-[2rem] bg-slate-900 p-6 text-white shadow-2xl shadow-slate-300/40 transition duration-200 hover:shadow-slate-400/40 lg:sticky lg:top-6 lg:self-start">
         <div class="text-xs uppercase tracking-[0.3em] text-slate-400">Admin</div>
         <h1 class="mt-3 text-3xl font-black">Dashboard</h1>
         <nav class="mt-8 space-y-2 text-sm font-medium">
-            <a href="<?= e(app_url('/admin/dashboard')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3">Overview</a>
-            <a href="<?= e(app_url('/admin/users')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Shopkeepers</a>
-            <a href="<?= e(app_url('/logout')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Logout</a>
+            <a href="<?= e(app_url('/admin/dashboard')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3 transition duration-200 hover:bg-white/15 hover:translate-x-1">Overview</a>
+            <a href="<?= e(app_url('/admin/users')) ?>" class="block rounded-2xl px-4 py-3 transition duration-200 hover:bg-white/10 hover:translate-x-1">Shopkeepers</a>
+            <a href="<?= e(app_url('/logout')) ?>" class="block rounded-2xl px-4 py-3 transition duration-200 hover:bg-white/10 hover:translate-x-1">Logout</a>
         </nav>
     </aside>
 
     <section class="space-y-8">
         <div class="grid gap-4 md:grid-cols-3">
-            <div class="rounded-3xl bg-white p-6 shadow-lg">
+            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
                 <div class="text-sm text-slate-500">Shopkeepers</div>
                 <div class="mt-2 text-3xl font-black text-slate-900"><?= count($shopkeepers) ?></div>
             </div>
-            <div class="rounded-3xl bg-white p-6 shadow-lg">
+            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
                 <div class="text-sm text-slate-500">Bookings</div>
                 <div class="mt-2 text-3xl font-black text-slate-900"><?= count($bookings) ?></div>
             </div>
-            <div class="rounded-3xl bg-white p-6 shadow-lg">
+            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
                 <div class="text-sm text-slate-500">Active tenants</div>
                 <div class="mt-2 text-3xl font-black text-slate-900"><?= count(array_filter($shopkeepers, fn($shopkeeper) => (int) $shopkeeper['is_active'] === 1)) ?></div>
             </div>
         </div>
 
-        <div class="rounded-[2rem] bg-white p-6 shadow-xl">
-            <div class="flex items-center justify-between gap-4">
+        <div class="rounded-[2rem] bg-white p-6 shadow-xl transition duration-200 hover:shadow-2xl">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900">All shopkeepers</h2>
                     <p class="text-sm text-slate-500">Manage visibility and remove demo accounts.</p>
                 </div>
-                <a href="<?= e(app_url('/register')) ?>" class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white">Add shopkeeper</a>
+                <a href="<?= e(app_url('/register')) ?>" class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg">Add shopkeeper</a>
             </div>
             <div class="mt-6 overflow-x-auto">
                 <table class="min-w-full text-left text-sm">

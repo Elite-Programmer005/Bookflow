@@ -32,39 +32,39 @@ $logoutUrl = app_url('/logout');
                         BookFlow helps admins, shopkeepers, and customers manage appointments in one clean PHP + SQLite platform.
                         Each shopkeeper gets their own slug, services, working hours, and bookings.
                     </p>
-                    <div class="flex flex-wrap gap-3">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                         <?php if ($currentUser): ?>
-                            <a href="<?= e($dashboardUrl) ?>" class="rounded-2xl bg-white px-5 py-3 font-semibold text-slate-900 transition hover:bg-slate-200">
+                            <a href="<?= e($dashboardUrl) ?>" class="rounded-2xl bg-white px-5 py-3 font-semibold text-slate-900 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-200 hover:shadow-xl">
                                 Dashboard
                             </a>
-                            <a href="<?= e($logoutUrl) ?>" class="rounded-2xl border border-white/20 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10">
+                            <a href="<?= e($logoutUrl) ?>" class="rounded-2xl border border-white/20 bg-white/5 px-5 py-3 font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-white/10 hover:shadow-xl">
                                 Logout
                             </a>
                         <?php else: ?>
-                            <a href="<?= e($loginUrl) ?>" class="rounded-2xl bg-white px-5 py-3 font-semibold text-slate-900 transition hover:bg-slate-200">
+                            <a href="<?= e($loginUrl) ?>" class="rounded-2xl bg-white px-5 py-3 font-semibold text-slate-900 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-200 hover:shadow-xl">
                                 Login
                             </a>
-                            <a href="<?= e($registerUrl) ?>" class="rounded-2xl border border-white/20 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10">
+                            <a href="<?= e($registerUrl) ?>" class="rounded-2xl border border-white/20 bg-white/5 px-5 py-3 font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-white/10 hover:shadow-xl">
                                 Shopkeeper Register
                             </a>
                         <?php endif; ?>
                     </div>
                     <div class="grid gap-4 pt-4 sm:grid-cols-3">
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur transition duration-200 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10">
                             <div class="text-sm uppercase tracking-[0.25em] text-slate-400">Admins</div>
                             <div class="mt-2 text-lg font-semibold text-white">Manage tenants and bookings</div>
                         </div>
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur transition duration-200 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10">
                             <div class="text-sm uppercase tracking-[0.25em] text-slate-400">Shopkeepers</div>
                             <div class="mt-2 text-lg font-semibold text-white">Set services and hours</div>
                         </div>
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+                        <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur transition duration-200 hover:-translate-y-1 hover:border-white/20 hover:bg-white/10">
                             <div class="text-sm uppercase tracking-[0.25em] text-slate-400">Customers</div>
                             <div class="mt-2 text-lg font-semibold text-white">Book by public slug</div>
                         </div>
                     </div>
                 </section>
-                <aside class="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+                <aside class="rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-2xl shadow-black/20 backdrop-blur transition duration-200 hover:-translate-y-1 hover:shadow-black/30">
                     <h2 class="text-2xl font-bold text-white">How it works</h2>
                     <div class="mt-6 space-y-4 text-sm leading-7 text-slate-300">
                         <p>Use <span class="font-semibold text-white">/login</span> for admin and shopkeeper access.</p>
@@ -72,7 +72,7 @@ $logoutUrl = app_url('/logout');
                         <p>Customers open the public slug page, choose a service, and book without logging in.</p>
                         <p>Demo payment is built in for testing and presentations.</p>
                     </div>
-                    <div class="mt-8 rounded-3xl bg-white/5 p-5">
+                    <div class="mt-8 rounded-3xl bg-white/5 p-5 transition duration-200 hover:bg-white/10">
                         <div class="text-xs uppercase tracking-[0.3em] text-slate-400">Demo account</div>
                         <div class="mt-2 text-lg font-semibold text-white">admin@bookflow.com</div>
                         <div class="text-sm text-slate-300">Password: admin123</div>

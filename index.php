@@ -93,7 +93,8 @@ if ($route === '/login') {
                 <div class="font-semibold text-slate-800">Demo accounts</div>
                 <div class="mt-2 space-y-1">
                     <div>Admin: admin@bookflow.com / admin123</div>
-                    <div>Shopkeepers: created by seed.php or /register</div>
+                    <div>Shopkeeper: shopkeeper@bookflow.com / shop123</div>
+                    <div>Additional shopkeepers are created by seed.php or /register</div>
                 </div>
             </div>
         </section>

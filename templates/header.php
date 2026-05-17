@@ -26,21 +26,21 @@ $base = app_base_path();
                     <span class="text-xs font-medium uppercase tracking-[0.3em] text-slate-500">Appointments</span>
                 </span>
             </a>
-            <nav class="flex items-center gap-3 text-sm font-medium text-slate-600">
+            <nav class="flex flex-wrap items-center justify-end gap-2 text-sm font-medium text-slate-600">
                 <?php if ($currentUser): ?>
                     <?php if ($currentUser['role'] === 'admin'): ?>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/admin/dashboard')) ?>">Admin</a>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/admin/users')) ?>">Users</a>
+                        <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/admin/dashboard')) ?>">Admin</a>
+                        <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/admin/users')) ?>">Users</a>
                     <?php else: ?>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/dashboard')) ?>">Dashboard</a>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/services')) ?>">Services</a>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/bookings')) ?>">Bookings</a>
+                        <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/dashboard')) ?>">Dashboard</a>
+                        <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/services')) ?>">Services</a>
+                        <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/bookings')) ?>">Bookings</a>
                     <?php endif; ?>
-                    <span class="hidden rounded-full bg-slate-100 px-4 py-2 text-slate-700 sm:inline-flex"><?= e($currentUser['email']) ?></span>
-                    <a class="rounded-full bg-slate-900 px-4 py-2 text-white hover:bg-slate-700" href="<?= e(app_url('/logout')) ?>">Logout</a>
+                    <span class="hidden max-w-[16rem] truncate rounded-full bg-slate-100 px-4 py-2 text-slate-700 sm:inline-flex"><?= e($currentUser['email']) ?></span>
+                    <a class="rounded-full bg-slate-900 px-4 py-2 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg" href="<?= e(app_url('/logout')) ?>">Logout</a>
                 <?php else: ?>
-                    <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/login')) ?>">Login</a>
-                    <a class="rounded-full bg-slate-900 px-4 py-2 text-white hover:bg-slate-700" href="<?= e(app_url('/register')) ?>">Register</a>
+                    <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/login')) ?>">Login</a>
+                    <a class="rounded-full bg-slate-900 px-4 py-2 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg" href="<?= e(app_url('/register')) ?>">Register</a>
                 <?php endif; ?>
             </nav>
         </div>

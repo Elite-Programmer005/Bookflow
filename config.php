@@ -175,6 +175,7 @@ function db(): SQLite3
     $db->exec('PRAGMA journal_mode = WAL');
 
     initialize_database($db);
+    ensure_demo_shopkeeper_account($db);
 
     if (!defined('BOOKFLOW_AUTO_SEEDING') && should_auto_seed($db)) {
         define('BOOKFLOW_AUTO_SEEDING', true);
@@ -193,6 +194,25 @@ function should_auto_seed(SQLite3 $db): bool
 
     $result = $db->query('SELECT id FROM users WHERE role = "admin" LIMIT 1');
     return $result->fetchArray(SQLITE3_ASSOC) === false;
+}
+
+function ensure_demo_shopkeeper_account(SQLite3 $db): void
+{
+    $stmt = $db->prepare('SELECT id FROM users WHERE email = :email LIMIT 1');
+    $stmt->bindValue(':email', 'shopkeeper@bookflow.com', SQLITE3_TEXT);
+    if ($stmt->execute()->fetchArray(SQLITE3_ASSOC)) {
+        return;
+    }
+
+    $insert = $db->prepare('INSERT INTO users (email, password, role, business_name, slug, is_active, dummy_payment_enabled) VALUES (:email, :password, :role, :business_name, :slug, 1, 1)');
+    $insert->bindValue(':email', 'shopkeeper@bookflow.com', SQLITE3_TEXT);
+    $insert->bindValue(':password', password_hash('shop123', PASSWORD_BCRYPT), SQLITE3_TEXT);
+    $insert->bindValue(':role', 'shopkeeper', SQLITE3_TEXT);
+    $insert->bindValue(':business_name', 'Demo Shopkeeper', SQLITE3_TEXT);
+    $insert->bindValue(':slug', 'demo-shopkeeper', SQLITE3_TEXT);
+    $insert->execute();
+
+    ensure_default_working_hours((int) $db->lastInsertRowID());
 }
 
 function initialize_database(SQLite3 $db): void
