@@ -2,3 +2,55 @@ html { scroll-behavior: smooth; }
 body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 .booking-slot.is-selected { background-color: rgb(15 23 42); color: white; }
 .badge { display: inline-flex; align-items: center; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; }
+
+.animate-soft-float {
+	animation: soft-float 7s ease-in-out infinite;
+}
+
+.animate-rise {
+	animation: rise-in 520ms ease both;
+}
+
+.field-with-toggle {
+	position: relative;
+}
+
+.field-toggle-wrap {
+	position: relative;
+}
+
+.field-toggle-wrap input {
+	padding-right: 4.5rem;
+}
+
+.field-toggle-button {
+	position: absolute;
+	right: 0.75rem;
+	top: 50%;
+	transform: translateY(-50%);
+	line-height: 1;
+	border-radius: 9999px;
+	border: 1px solid rgb(226 232 240);
+	background: white;
+	padding: 0.4rem 0.8rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: rgb(71 85 105);
+	transition: transform 200ms ease, background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+}
+
+.field-toggle-button:hover {
+	background: rgb(248 250 252);
+	color: rgb(15 23 42);
+	box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+}
+
+@keyframes soft-float {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-4px); }
+}
+
+@keyframes rise-in {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: translateY(0); }
+}

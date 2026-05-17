@@ -19,7 +19,7 @@ require __DIR__ . '/../templates/header.php';
 <div class="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
     <aside class="rounded-[2rem] bg-slate-900 p-6 text-white shadow-2xl shadow-slate-300/40 transition duration-200 hover:shadow-slate-400/40 lg:sticky lg:top-6 lg:self-start">
         <div class="text-xs uppercase tracking-[0.3em] text-slate-400">Shopkeeper</div>
-        <h1 class="mt-3 text-3xl font-black"><?= e(business_label($shopkeeper)) ?></h1>
+        <h1 class="mt-3 text-3xl font-black animate-soft-float"><?= e(business_label($shopkeeper)) ?></h1>
         <nav class="mt-8 space-y-2 text-sm font-medium">
             <a href="<?= e(app_url('/shopkeeper/dashboard')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3 transition duration-200 hover:bg-white/15 hover:translate-x-1">Dashboard</a>
             <a href="<?= e(app_url('/shopkeeper/services')) ?>" class="block rounded-2xl px-4 py-3 transition duration-200 hover:bg-white/10 hover:translate-x-1">Services</a>
@@ -31,15 +31,15 @@ require __DIR__ . '/../templates/header.php';
 
     <section class="space-y-8">
         <div class="grid gap-4 md:grid-cols-3">
-            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
+            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl animate-rise">
                 <div class="text-sm text-slate-500">Active services</div>
                 <div class="mt-2 text-3xl font-black text-slate-900"><?= $activeCount ?></div>
             </div>
-            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
+            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl animate-rise">
                 <div class="text-sm text-slate-500">Total bookings</div>
                 <div class="mt-2 text-3xl font-black text-slate-900"><?= count($bookings) ?></div>
             </div>
-            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl">
+            <div class="rounded-3xl bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl animate-rise">
                 <div class="text-sm text-slate-500">Upcoming</div>
                 <div class="mt-2 text-3xl font-black text-slate-900"><?= $upcomingCount ?></div>
             </div>

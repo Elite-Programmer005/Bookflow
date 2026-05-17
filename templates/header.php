@@ -28,17 +28,20 @@ $base = app_base_path();
             </a>
             <nav class="flex flex-wrap items-center justify-end gap-2 text-sm font-medium text-slate-600">
                 <?php if ($currentUser): ?>
+                    <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/book')) ?>">Book Services</a>
                     <?php if ($currentUser['role'] === 'admin'): ?>
                         <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/admin/dashboard')) ?>">Admin</a>
                         <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/admin/users')) ?>">Users</a>
                     <?php else: ?>
                         <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/dashboard')) ?>">Dashboard</a>
                         <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/services')) ?>">Services</a>
+                        <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/hours')) ?>">Hours</a>
                         <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/bookings')) ?>">Bookings</a>
                     <?php endif; ?>
                     <span class="hidden max-w-[16rem] truncate rounded-full bg-slate-100 px-4 py-2 text-slate-700 sm:inline-flex"><?= e($currentUser['email']) ?></span>
                     <a class="rounded-full bg-slate-900 px-4 py-2 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg" href="<?= e(app_url('/logout')) ?>">Logout</a>
                 <?php else: ?>
+                    <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/book')) ?>">Book Services</a>
                     <a class="rounded-full px-4 py-2 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-100" href="<?= e(app_url('/login')) ?>">Login</a>
                     <a class="rounded-full bg-slate-900 px-4 py-2 text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg" href="<?= e(app_url('/register')) ?>">Register</a>
                 <?php endif; ?>
@@ -47,7 +50,15 @@ $base = app_base_path();
     </header>
     <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <?php if ($msg = flash('success')): ?>
-            <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800"><?= e($msg) ?></div>
+            <div class="mb-6 animate-rise rounded-3xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800 shadow-lg shadow-emerald-100/60">
+                <div class="flex items-start gap-3">
+                    <div class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-emerald-600 text-white">✓</div>
+                    <div>
+                        <div class="font-semibold">Success</div>
+                        <div class="text-sm text-emerald-700"><?= e($msg) ?></div>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
         <?php if ($msg = flash('error')): ?>
             <div class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800"><?= e($msg) ?></div>

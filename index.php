@@ -83,9 +83,12 @@ if ($route === '/login') {
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
                     <input name="email" type="email" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none ring-0 focus:border-slate-400" placeholder="admin@bookflow.com">
                 </div>
-                <div>
+                <div class="field-with-toggle">
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Password</label>
-                    <input name="password" type="password" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none ring-0 focus:border-slate-400" placeholder="••••••••">
+                    <div class="field-toggle-wrap">
+                        <input id="login_password" name="password" type="password" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none ring-0 focus:border-slate-400" placeholder="••••••••">
+                        <button type="button" class="field-toggle-button" data-password-toggle="#login_password">Show</button>
+                    </div>
                 </div>
                 <button class="w-full rounded-2xl bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-700">Login</button>
             </form>
@@ -98,6 +101,50 @@ if ($route === '/login') {
                 </div>
             </div>
         </section>
+    </div>
+    <?php
+    require __DIR__ . '/templates/footer.php';
+    exit;
+}
+
+if ($route === '/book') {
+    $pageTitle = 'Book Services';
+    $shopkeepers = fetch_public_shopkeepers();
+    require __DIR__ . '/templates/header.php';
+    ?>
+    <div class="space-y-8">
+        <section class="rounded-[2rem] bg-slate-900 p-8 text-white shadow-2xl shadow-slate-300/40 animate-rise">
+            <div class="max-w-3xl space-y-4">
+                <span class="inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-sky-200">Customer access</span>
+                <h1 class="text-4xl font-black tracking-tight sm:text-5xl animate-soft-float">Book a service without logging in</h1>
+                <p class="text-slate-300">Choose a shopkeeper, open their booking page, and pick a time slot. Customer accounts are optional.</p>
+            </div>
+        </section>
+
+        <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <?php foreach ($shopkeepers as $shopkeeper): ?>
+                <article class="rounded-[2rem] border border-white bg-white p-6 shadow-lg transition duration-200 hover:-translate-y-1 hover:shadow-2xl animate-rise">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl font-black text-slate-900"><?= e((string) $shopkeeper['business_name']) ?></h2>
+                            <p class="mt-1 text-sm text-slate-500">Slug: <?= e((string) $shopkeeper['slug']) ?></p>
+                        </div>
+                        <div class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"><?= (int) $shopkeeper['service_count'] ?> services</div>
+                    </div>
+                    <p class="mt-4 text-sm leading-6 text-slate-600">Open the booking page, browse services, and choose a slot that fits your schedule.</p>
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <a href="<?= e(app_url('/' . (string) $shopkeeper['slug'])) ?>" class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg">Book now</a>
+                        <a href="<?= e(app_url('/' . (string) $shopkeeper['slug'])) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50">View page</a>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </section>
+
+        <?php if (!$shopkeepers): ?>
+            <div class="rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-slate-600">
+                No shopkeepers are available right now.
+            </div>
+        <?php endif; ?>
     </div>
     <?php
     require __DIR__ . '/templates/footer.php';
@@ -172,9 +219,12 @@ if ($route === '/register') {
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
                     <input name="email" type="email" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-slate-400" placeholder="owner@example.com">
                 </div>
-                <div>
+                <div class="field-with-toggle">
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Password</label>
-                    <input name="password" type="password" required minlength="6" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-slate-400" placeholder="At least 6 characters">
+                    <div class="field-toggle-wrap">
+                        <input id="register_password" name="password" type="password" required minlength="6" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-slate-400" placeholder="At least 6 characters">
+                        <button type="button" class="field-toggle-button" data-password-toggle="#register_password">Show</button>
+                    </div>
                 </div>
                 <button class="w-full rounded-2xl bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-700">Create account</button>
             </form>

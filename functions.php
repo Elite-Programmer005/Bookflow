@@ -173,6 +173,21 @@ function fetch_user_by_slug(string $slug): ?array
     return $row ?: null;
 }
 
+function fetch_public_shopkeepers(): array
+{
+    $result = db()->query('SELECT u.*, (SELECT COUNT(*) FROM services s WHERE s.shopkeeper_id = u.id AND s.is_active = 1) AS service_count
+        FROM users u
+        WHERE u.role = "shopkeeper" AND u.is_active = 1
+        ORDER BY u.business_name ASC, u.created_at DESC');
+
+    $rows = [];
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $rows[] = $row;
+    }
+
+    return $rows;
+}
+
 function fetch_services(int $shopkeeperId, bool $onlyActive = true): array
 {
     $sql = 'SELECT * FROM services WHERE shopkeeper_id = :shopkeeper_id';

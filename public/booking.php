@@ -27,12 +27,21 @@ if (!$shopkeeper) {
 }
 
 $services = fetch_services((int) $shopkeeper['id']);
+$workingHours = fetch_working_hours((int) $shopkeeper['id']);
 $selectedServiceId = (int) ($_GET['service_id'] ?? ($services[0]['id'] ?? 0));
 $selectedDate = (string) ($_GET['date'] ?? date('Y-m-d'));
 $availableSlots = [];
+$isAdvanceBooking = false;
+$selectedDayOfWeek = (int) date('N', strtotime($selectedDate)) - 1;
+$selectedDayHours = $workingHours[$selectedDayOfWeek] ?? null;
 
 if ($selectedServiceId > 0 && validate_booking_date($selectedDate)) {
     $availableSlots = generateTimeSlots((int) $shopkeeper['id'], $selectedServiceId, $selectedDate);
+}
+
+$selectedDateObject = DateTimeImmutable::createFromFormat('Y-m-d', $selectedDate);
+if ($selectedDateObject instanceof DateTimeImmutable) {
+    $isAdvanceBooking = $selectedDateObject > new DateTimeImmutable('today');
 }
 
 if (is_post()) {
@@ -50,9 +59,17 @@ if (is_post()) {
     $serviceStmt->bindValue(':shopkeeper_id', (int) $shopkeeper['id'], SQLITE3_INTEGER);
     $service = $serviceStmt->execute()->fetchArray(SQLITE3_ASSOC);
 
+    $bookingDateObject = DateTimeImmutable::createFromFormat('Y-m-d', $bookingDate);
+    $isAdvanceBooking = $bookingDateObject instanceof DateTimeImmutable && $bookingDateObject > new DateTimeImmutable('today');
+
     if (!$service || !validate_booking_date($bookingDate) || $customerName === '' || !filter_var($customerEmail, FILTER_VALIDATE_EMAIL) || $startTime === '') {
         flash('error', 'Please complete the booking form and choose a valid slot.');
         redirect_to('/' . $shopkeeper['slug']);
+    }
+
+    if ($isAdvanceBooking && !$dummyPayment) {
+        flash('error', 'Advance bookings require demo payment to confirm the slot.');
+        redirect_to('/' . $shopkeeper['slug'] . '?service_id=' . $serviceId . '&date=' . urlencode($bookingDate));
     }
 
     $validSlots = generateTimeSlots((int) $shopkeeper['id'], $serviceId, $bookingDate);
@@ -62,7 +79,7 @@ if (is_post()) {
     }
 
     $endTime = booking_end_time($startTime, (int) $service['duration_minutes']);
-    $status = $dummyPayment ? 'confirmed' : 'pending';
+    $status = ($dummyPayment || $isAdvanceBooking) ? 'confirmed' : 'pending';
     $paidDummy = $dummyPayment ? 1 : 0;
 
     $stmt = db()->prepare('INSERT INTO bookings (shopkeeper_id, service_id, customer_name, customer_email, customer_phone, booking_date, start_time, end_time, status, paid_dummy)
@@ -89,11 +106,11 @@ require __DIR__ . '/../templates/header.php';
 ?>
 <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
     <section class="space-y-6">
-        <div class="rounded-[2rem] bg-slate-900 p-8 text-white shadow-2xl shadow-slate-300/40">
+        <div class="rounded-[2rem] bg-slate-900 p-8 text-white shadow-2xl shadow-slate-300/40 animate-rise">
             <div class="flex flex-wrap items-start justify-between gap-4">
                 <div>
                     <span class="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-sky-200">Public booking</span>
-                    <h1 class="mt-4 text-4xl font-black tracking-tight sm:text-5xl"><?= e(business_label($shopkeeper)) ?></h1>
+                    <h1 class="mt-4 text-4xl font-black tracking-tight sm:text-5xl animate-soft-float"><?= e(business_label($shopkeeper)) ?></h1>
                     <p class="mt-3 max-w-xl text-sm leading-6 text-slate-300">Choose a service, date, and time slot. Payment is simulated for demo use only.</p>
                 </div>
                 <div class="rounded-3xl bg-white/10 px-5 py-4 text-right">
@@ -105,7 +122,7 @@ require __DIR__ . '/../templates/header.php';
 
         <div class="grid gap-4 md:grid-cols-2">
             <?php foreach ($services as $service): ?>
-                <a href="<?= e(app_url('/' . $shopkeeper['slug'] . '?service_id=' . (int) $service['id'] . '&date=' . urlencode($selectedDate))) ?>" class="rounded-3xl border <?= (int) $service['id'] === $selectedServiceId ? 'border-slate-900 bg-slate-900 text-white' : 'border-white bg-white' ?> p-5 shadow-sm transition hover:-translate-y-0.5">
+                <a href="<?= e(app_url('/' . $shopkeeper['slug'] . '?service_id=' . (int) $service['id'] . '&date=' . urlencode($selectedDate))) ?>" class="rounded-3xl border <?= (int) $service['id'] === $selectedServiceId ? 'border-slate-900 bg-slate-900 text-white' : 'border-white bg-white' ?> p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg animate-rise">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <h2 class="text-lg font-bold"><?= e($service['name']) ?></h2>
@@ -117,7 +134,7 @@ require __DIR__ . '/../templates/header.php';
             <?php endforeach; ?>
         </div>
 
-        <form method="get" class="rounded-[2rem] border border-white bg-white p-6 shadow-lg">
+        <form method="get" class="rounded-[2rem] border border-white bg-white p-6 shadow-lg animate-rise">
             <input type="hidden" name="slug" value="<?= e($shopkeeper['slug']) ?>">
             <div class="grid gap-4 md:grid-cols-3">
                 <div>
@@ -138,7 +155,28 @@ require __DIR__ . '/../templates/header.php';
             </div>
         </form>
 
-        <div class="rounded-[2rem] border border-white bg-white p-6 shadow-lg">
+        <div class="rounded-[2rem] border border-white bg-white p-6 shadow-lg animate-rise">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Working hours</h2>
+                    <p class="text-sm text-slate-500">Slots are generated from the shop's saved schedule.</p>
+                </div>
+                <div class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"><?= e(day_name($selectedDayOfWeek)) ?></div>
+            </div>
+            <div class="mt-4">
+                <?php if ($selectedDayHours && (int) $selectedDayHours['is_closed'] !== 1): ?>
+                    <div class="inline-flex rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">
+                        <?= e($selectedDayHours['start_time']) ?> - <?= e($selectedDayHours['end_time']) ?>
+                    </div>
+                <?php else: ?>
+                    <div class="inline-flex rounded-2xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
+                        Closed on this day
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="rounded-[2rem] border border-white bg-white p-6 shadow-lg animate-rise">
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Available slots</h2>
@@ -158,18 +196,23 @@ require __DIR__ . '/../templates/header.php';
     </section>
 
     <aside class="space-y-6">
-        <form id="bookingForm" method="post" class="rounded-[2rem] border border-white bg-white p-6 shadow-xl">
+        <form id="bookingForm" method="post" class="rounded-[2rem] border border-white bg-white p-6 shadow-xl animate-rise">
             <?= csrf_field() ?>
             <input type="hidden" name="service_id" value="<?= (int) $selectedServiceId ?>">
             <input type="hidden" name="booking_date" value="<?= e($selectedDate) ?>">
-            <input type="hidden" name="start_time" value="">
+            <input type="hidden" value="" data-booking-time-input>
             <input type="hidden" name="dummy_payment" value="0">
             <h2 class="text-2xl font-bold text-slate-900">Book now</h2>
-            <p class="mt-1 text-sm text-slate-500">Complete the form and use the demo payment button.</p>
+            <p class="mt-1 text-sm text-slate-500">Choose a time slot, fill in your details, and pay dummy for advance bookings.</p>
             <div class="mt-5 space-y-4">
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Selected time</label>
-                    <input readonly id="selected_time_display" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3" placeholder="Choose a slot">
+                    <select name="start_time" data-booking-time-select class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                        <option value="">Choose a slot</option>
+                        <?php foreach ($availableSlots as $slot): ?>
+                            <option value="<?= e($slot) ?>"><?= e($slot) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Your name</label>
@@ -183,9 +226,12 @@ require __DIR__ . '/../templates/header.php';
                     <label class="mb-2 block text-sm font-semibold text-slate-700">Phone</label>
                     <input name="customer_phone" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                 </div>
+                <div class="rounded-2xl border border-sky-100 bg-sky-50 p-4 text-sm text-sky-800">
+                    <?= $isAdvanceBooking ? 'Advance booking: demo payment is required to confirm this slot.' : 'Same-day booking can be saved as pending without demo payment.' ?>
+                </div>
             </div>
             <div class="mt-6 grid gap-3">
-                <button type="button" data-dummy-pay data-form-target="#bookingForm" class="rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-500">Pay Dummy</button>
+                <button type="button" data-dummy-pay data-form-target="#bookingForm" class="rounded-2xl bg-emerald-600 px-4 py-3 font-semibold text-white transition hover:bg-emerald-500">Pay Dummy &amp; Book</button>
                 <button type="submit" class="rounded-2xl border border-slate-200 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50">Save without dummy payment</button>
             </div>
         </form>

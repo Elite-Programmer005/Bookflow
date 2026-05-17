@@ -92,9 +92,12 @@ require __DIR__ . '/../templates/header.php';
             <label class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
             <input name="email" type="email" value="<?= e($shopkeeper['email']) ?>" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
         </div>
-        <div>
+        <div class="field-with-toggle">
             <label class="mb-2 block text-sm font-semibold text-slate-700">New password</label>
-            <input name="password" type="password" minlength="6" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3" placeholder="Leave blank to keep current password">
+            <div class="field-toggle-wrap">
+                <input id="shopkeeper_password" name="password" type="password" minlength="6" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3" placeholder="Leave blank to keep current password">
+                <button type="button" class="field-toggle-button" data-password-toggle="#shopkeeper_password">Show</button>
+            </div>
         </div>
         <div class="md:col-span-2">
             <label class="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">

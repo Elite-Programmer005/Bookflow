@@ -200,7 +200,9 @@ function ensure_demo_shopkeeper_account(SQLite3 $db): void
 {
     $stmt = $db->prepare('SELECT id FROM users WHERE email = :email LIMIT 1');
     $stmt->bindValue(':email', 'shopkeeper@bookflow.com', SQLITE3_TEXT);
-    if ($stmt->execute()->fetchArray(SQLITE3_ASSOC)) {
+    $existing = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+    if ($existing) {
+        ensure_demo_shopkeeper_service($db, (int) $existing['id']);
         return;
     }
 
@@ -212,7 +214,25 @@ function ensure_demo_shopkeeper_account(SQLite3 $db): void
     $insert->bindValue(':slug', 'demo-shopkeeper', SQLITE3_TEXT);
     $insert->execute();
 
-    ensure_default_working_hours((int) $db->lastInsertRowID());
+    $shopkeeperId = (int) $db->lastInsertRowID();
+    ensure_default_working_hours($shopkeeperId);
+    ensure_demo_shopkeeper_service($db, $shopkeeperId);
+}
+
+function ensure_demo_shopkeeper_service(SQLite3 $db, int $shopkeeperId): void
+{
+    $stmt = $db->prepare('SELECT id FROM services WHERE shopkeeper_id = :shopkeeper_id LIMIT 1');
+    $stmt->bindValue(':shopkeeper_id', $shopkeeperId, SQLITE3_INTEGER);
+    if ($stmt->execute()->fetchArray(SQLITE3_ASSOC)) {
+        return;
+    }
+
+    $insert = $db->prepare('INSERT INTO services (shopkeeper_id, name, duration_minutes, price, is_active) VALUES (:shopkeeper_id, :name, :duration_minutes, :price, 1)');
+    $insert->bindValue(':shopkeeper_id', $shopkeeperId, SQLITE3_INTEGER);
+    $insert->bindValue(':name', 'Demo Consultation', SQLITE3_TEXT);
+    $insert->bindValue(':duration_minutes', 30, SQLITE3_INTEGER);
+    $insert->bindValue(':price', 20, SQLITE3_FLOAT);
+    $insert->execute();
 }
 
 function initialize_database(SQLite3 $db): void
