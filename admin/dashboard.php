@@ -17,20 +17,20 @@ if (is_post()) {
         $stmt->bindValue(':id', $userId, SQLITE3_INTEGER);
         $stmt->execute();
         flash('success', 'Shopkeeper status updated.');
-        redirect_to('/admin/dashboard.php');
+        redirect_to('/admin/dashboard');
     }
 
     if ($action === 'delete' && $userId > 0) {
         if ($userId === current_user_id()) {
             flash('error', 'You cannot delete your own admin account.');
-            redirect_to('/admin/dashboard.php');
+            redirect_to('/admin/dashboard');
         }
 
         $stmt = db()->prepare('DELETE FROM users WHERE id = :id AND role = "shopkeeper"');
         $stmt->bindValue(':id', $userId, SQLITE3_INTEGER);
         $stmt->execute();
         flash('success', 'Shopkeeper deleted.');
-        redirect_to('/admin/dashboard.php');
+        redirect_to('/admin/dashboard');
     }
 }
 
@@ -49,7 +49,7 @@ require __DIR__ . '/../templates/header.php';
         <div class="text-xs uppercase tracking-[0.3em] text-slate-400">Admin</div>
         <h1 class="mt-3 text-3xl font-black">Dashboard</h1>
         <nav class="mt-8 space-y-2 text-sm font-medium">
-            <a href="<?= e(app_url('/admin/dashboard.php')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3">Overview</a>
+            <a href="<?= e(app_url('/admin/dashboard')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3">Overview</a>
             <a href="<?= e(app_url('/admin/users')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Shopkeepers</a>
             <a href="<?= e(app_url('/logout')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Logout</a>
         </nav>

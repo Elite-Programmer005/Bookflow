@@ -60,12 +60,13 @@ function flash(string $key, ?string $message = null): ?string
 
 function user_from_session(): ?array
 {
-    if (empty($_SESSION['user_id'])) {
+    $sessionUserId = (int) ($_SESSION['user']['id'] ?? $_SESSION['user_id'] ?? 0);
+    if ($sessionUserId <= 0) {
         return null;
     }
 
     $stmt = db()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
-    $stmt->bindValue(':id', (int) $_SESSION['user_id'], SQLITE3_INTEGER);
+    $stmt->bindValue(':id', $sessionUserId, SQLITE3_INTEGER);
     $result = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
     if ($result && (int) ($result['is_active'] ?? 1) !== 1) {
         return null;
@@ -125,10 +126,10 @@ function safe_redirect_after_login(): void
     }
 
     if ($user['role'] === 'admin') {
-        redirect_to('/admin/dashboard.php');
+        redirect_to('/admin/dashboard');
     }
 
-    redirect_to('/shopkeeper/dashboard.php');
+    redirect_to('/shopkeeper/dashboard');
 }
 
 function route_exists(string $path): bool

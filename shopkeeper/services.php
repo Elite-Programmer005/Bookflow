@@ -113,7 +113,7 @@ require __DIR__ . '/../templates/header.php';
                 <h2 class="text-2xl font-bold text-slate-900">Your services</h2>
                 <p class="text-sm text-slate-500">Manage the treatments your customers can book.</p>
             </div>
-            <a href="<?= e(app_url('/shopkeeper/dashboard.php')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Dashboard</a>
+            <a href="<?= e(app_url('/shopkeeper/dashboard')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Dashboard</a>
         </div>
         <div class="mt-6 overflow-x-auto">
             <table class="min-w-full text-left text-sm">

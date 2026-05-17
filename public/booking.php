@@ -6,7 +6,12 @@ require_once __DIR__ . '/../functions.php';
 require_once __DIR__ . '/../auth.php';
 
 $slug = (string) ($_GET['slug'] ?? '');
-$shopkeeper = $slug !== '' ? fetch_user_by_slug($slug) : null;
+
+if ($slug === '') {
+    redirect_to('/');
+}
+
+$shopkeeper = fetch_user_by_slug($slug);
 
 if (!$shopkeeper) {
     http_response_code(404);

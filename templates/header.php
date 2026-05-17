@@ -29,10 +29,10 @@ $base = app_base_path();
             <nav class="flex items-center gap-3 text-sm font-medium text-slate-600">
                 <?php if ($currentUser): ?>
                     <?php if ($currentUser['role'] === 'admin'): ?>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/admin/dashboard.php')) ?>">Admin</a>
+                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/admin/dashboard')) ?>">Admin</a>
                         <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/admin/users')) ?>">Users</a>
                     <?php else: ?>
-                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/dashboard.php')) ?>">Dashboard</a>
+                        <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/dashboard')) ?>">Dashboard</a>
                         <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/services')) ?>">Services</a>
                         <a class="rounded-full px-4 py-2 hover:bg-slate-100" href="<?= e(app_url('/shopkeeper/bookings')) ?>">Bookings</a>
                     <?php endif; ?>

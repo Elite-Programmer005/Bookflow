@@ -176,7 +176,23 @@ function db(): SQLite3
 
     initialize_database($db);
 
+    if (!defined('BOOKFLOW_AUTO_SEEDING') && should_auto_seed($db)) {
+        define('BOOKFLOW_AUTO_SEEDING', true);
+        require __DIR__ . '/seed.php';
+    }
+
     return $db;
+}
+
+function should_auto_seed(SQLite3 $db): bool
+{
+    $script = basename((string) ($_SERVER['SCRIPT_FILENAME'] ?? ''));
+    if ($script === 'seed.php') {
+        return false;
+    }
+
+    $result = $db->query('SELECT id FROM users WHERE role = "admin" LIMIT 1');
+    return $result->fetchArray(SQLITE3_ASSOC) === false;
 }
 
 function initialize_database(SQLite3 $db): void
@@ -259,33 +275,30 @@ function initialize_database(SQLite3 $db): void
     $db->exec('CREATE INDEX IF NOT EXISTS idx_services_shopkeeper ON services(shopkeeper_id)');
     $db->exec('CREATE INDEX IF NOT EXISTS idx_working_hours_shopkeeper_day ON working_hours(shopkeeper_id, day_of_week)');
 
-    $result = $db->querySingle('SELECT COUNT(*) AS count FROM users WHERE role = "admin"', true);
-    if ((int)($result['count'] ?? 0) === 0) {
-        $stmt = $db->prepare('INSERT INTO users (email, password, role, business_name, slug, is_active) VALUES (:email, :password, :role, :business_name, :slug, :is_active)');
-        $stmt->bindValue(':email', 'admin@bookflow.com', SQLITE3_TEXT);
-        $stmt->bindValue(':password', password_hash('admin123', PASSWORD_BCRYPT), SQLITE3_TEXT);
-        $stmt->bindValue(':role', 'admin', SQLITE3_TEXT);
-        $stmt->bindValue(':business_name', null, SQLITE3_NULL);
-        $stmt->bindValue(':slug', null, SQLITE3_NULL);
-        $stmt->bindValue(':is_active', 1, SQLITE3_INTEGER);
-        $stmt->execute();
-    }
 }
 
 function app_base_path(): string
 {
     $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
-    if (basename($scriptName) === 'index.php') {
-        $basePath = rtrim(dirname($scriptName), '/');
-    } else {
-        $basePath = rtrim(dirname(dirname($scriptName)), '/');
+    $scriptName = preg_replace('#/+#', '/', $scriptName) ?: '/';
+
+    if (preg_match('#/(admin|shopkeeper|public)(/|$)#', $scriptName)) {
+        return '';
     }
 
-    if ($basePath === '.' || $basePath === '/') {
-        $basePath = '';
+    $scriptBase = basename($scriptName);
+    if (!in_array($scriptBase, ['index.php', 'router.php'], true)) {
+        return '';
     }
 
-    return $basePath;
+    $basePath = preg_replace('#/[^/]+$#', '', $scriptName) ?: '';
+    $basePath = trim($basePath, '/');
+
+    if ($basePath === '' || $basePath === '.') {
+        return '';
+    }
+
+    return '/' . trim($basePath, '/');
 }
 
 function app_url(string $path = ''): string

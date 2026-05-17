@@ -7,11 +7,15 @@ require_once __DIR__ . '/auth.php';
 
 $route = current_path();
 
+if ($route === '/assets' || str_starts_with($route, '/assets/')) {
+    http_response_code(404);
+    exit('Not found');
+}
+
 if ($route === '/' || $route === '') {
-    if (is_logged_in()) {
-        safe_redirect_after_login();
-    }
-    redirect_to('/login');
+    $pageTitle = 'Welcome';
+    require __DIR__ . '/templates/landing.php';
+    exit;
 }
 
 if ($route === '/logout') {
@@ -128,9 +132,16 @@ if ($route === '/register') {
 
         $user = create_shopkeeper_account($email, $password, $businessName, $slug !== '' ? $slug : $businessName);
         ensure_default_working_hours((int) $user['id']);
+        $_SESSION['user'] = [
+            'id' => (int) $user['id'],
+            'role' => 'shopkeeper',
+            'email' => $email,
+            'business_name' => $businessName,
+            'slug' => (string) ($user['slug'] ?? $slug),
+        ];
         $_SESSION['user_id'] = (int) $user['id'];
         flash('success', 'Account created successfully.');
-        redirect_to('/shopkeeper/dashboard.php');
+        redirect_to('/shopkeeper/dashboard');
     }
 
     $pageTitle = 'Register';
@@ -175,15 +186,9 @@ if ($route === '/register') {
 
 if (str_starts_with($route, '/admin')) {
     if ($route === '/admin') {
-        redirect_to('/admin/dashboard.php');
+        redirect_to('/admin/dashboard');
     }
     require_role('admin');
-    $file = __DIR__ . $route;
-    if (is_file($file)) {
-        require $file;
-        exit;
-    }
-
     $file = __DIR__ . $route . '.php';
     if (!is_file($file)) {
         http_response_code(404);
@@ -195,15 +200,9 @@ if (str_starts_with($route, '/admin')) {
 
 if (str_starts_with($route, '/shopkeeper')) {
     if ($route === '/shopkeeper') {
-        redirect_to('/shopkeeper/dashboard.php');
+        redirect_to('/shopkeeper/dashboard');
     }
     require_role('shopkeeper');
-    $file = __DIR__ . $route;
-    if (is_file($file)) {
-        require $file;
-        exit;
-    }
-
     $file = __DIR__ . $route . '.php';
     if (!is_file($file)) {
         http_response_code(404);
@@ -213,15 +212,19 @@ if (str_starts_with($route, '/shopkeeper')) {
     exit;
 }
 
-if ($route === '/public/booking.php') {
-    require __DIR__ . '/public/booking.php';
-    exit;
-}
+if ($route !== '/' && $route !== '') {
+    $slug = slug_from_path($route);
+    if ($slug !== null) {
+        $shopkeeper = fetch_user_by_slug($slug);
+        if ($shopkeeper) {
+            $_GET['slug'] = $slug;
+            require __DIR__ . '/public/booking.php';
+            exit;
+        }
 
-if ($slug = slug_from_path($route)) {
-    $_GET['slug'] = $slug;
-    require __DIR__ . '/public/booking.php';
-    exit;
+        http_response_code(404);
+        exit('Not found');
+    }
 }
 
 http_response_code(404);

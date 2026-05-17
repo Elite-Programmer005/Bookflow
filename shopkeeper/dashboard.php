@@ -21,7 +21,7 @@ require __DIR__ . '/../templates/header.php';
         <div class="text-xs uppercase tracking-[0.3em] text-slate-400">Shopkeeper</div>
         <h1 class="mt-3 text-3xl font-black"><?= e(business_label($shopkeeper)) ?></h1>
         <nav class="mt-8 space-y-2 text-sm font-medium">
-            <a href="<?= e(app_url('/shopkeeper/dashboard.php')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3">Dashboard</a>
+            <a href="<?= e(app_url('/shopkeeper/dashboard')) ?>" class="block rounded-2xl bg-white/10 px-4 py-3">Dashboard</a>
             <a href="<?= e(app_url('/shopkeeper/services')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Services</a>
             <a href="<?= e(app_url('/shopkeeper/hours')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Working hours</a>
             <a href="<?= e(app_url('/shopkeeper/bookings')) ?>" class="block rounded-2xl px-4 py-3 hover:bg-white/10">Bookings</a>

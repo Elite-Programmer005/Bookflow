@@ -36,7 +36,7 @@ require __DIR__ . '/../templates/header.php';
             <h1 class="text-3xl font-black text-slate-900">Bookings</h1>
             <p class="text-sm text-slate-500">Confirm, cancel, or mark appointments as completed.</p>
         </div>
-        <a href="<?= e(app_url('/shopkeeper/dashboard.php')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Dashboard</a>
+        <a href="<?= e(app_url('/shopkeeper/dashboard')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Dashboard</a>
     </div>
 
     <div class="mt-6 overflow-x-auto">

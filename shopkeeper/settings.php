@@ -75,7 +75,7 @@ require __DIR__ . '/../templates/header.php';
             <h1 class="text-3xl font-black text-slate-900">Business settings</h1>
             <p class="text-sm text-slate-500">Update profile, slug, and demo payment preference.</p>
         </div>
-        <a href="<?= e(app_url('/shopkeeper/dashboard.php')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Dashboard</a>
+        <a href="<?= e(app_url('/shopkeeper/dashboard')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Dashboard</a>
     </div>
 
     <form method="post" class="mt-6 grid gap-4 md:grid-cols-2">

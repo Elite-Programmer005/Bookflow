@@ -34,7 +34,7 @@ require __DIR__ . '/../templates/header.php';
             <h1 class="text-3xl font-black text-slate-900">Shopkeepers</h1>
             <p class="text-sm text-slate-500">Delete or review tenant accounts.</p>
         </div>
-        <a href="<?= e(app_url('/admin/dashboard.php')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Back to dashboard</a>
+        <a href="<?= e(app_url('/admin/dashboard')) ?>" class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700">Back to dashboard</a>
     </div>
     <div class="mt-6 overflow-x-auto">
         <table class="min-w-full text-left text-sm">

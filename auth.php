@@ -16,6 +16,13 @@ function authenticate_user(string $email, string $password): bool
     }
 
     session_regenerate_id(true);
+    $_SESSION['user'] = [
+        'id' => (int) $user['id'],
+        'role' => (string) $user['role'],
+        'email' => (string) $user['email'],
+        'business_name' => (string) ($user['business_name'] ?? ''),
+        'slug' => (string) ($user['slug'] ?? ''),
+    ];
     $_SESSION['user_id'] = (int) $user['id'];
     return true;
 }

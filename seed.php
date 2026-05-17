@@ -5,10 +5,12 @@ declare(strict_types=1);
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/auth.php';
 
-if (PHP_SAPI !== 'cli') {
+if (PHP_SAPI !== 'cli' && !defined('BOOKFLOW_AUTO_SEEDING')) {
     http_response_code(403);
     exit("Run this script from the command line: php seed.php\n");
 }
+
+$quiet = defined('BOOKFLOW_AUTO_SEEDING');
 
 $db = db();
 $db->exec('PRAGMA foreign_keys = OFF');
@@ -114,6 +116,8 @@ for ($i = 0; $i < 5; $i++) {
     }
 }
 
-echo "Seed completed successfully.\n";
-echo "Admin login: admin@bookflow.com / admin123\n";
-echo "Shopkeeper logins: seed-generated emails with password shop123\n";
+if (!$quiet) {
+    echo "Seed completed successfully.\n";
+    echo "Admin login: admin@bookflow.com / admin123\n";
+    echo "Shopkeeper logins: seed-generated emails with password shop123\n";
+}
