@@ -77,7 +77,7 @@ require __DIR__ . '/../templates/header.php';
                     <h2 class="text-2xl font-bold text-slate-900">All shopkeepers</h2>
                     <p class="text-sm text-slate-500">Manage visibility and remove demo accounts.</p>
                 </div>
-                <a href="<?= e(app_url('/register')) ?>" class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg">Add shopkeeper</a>
+                <a href="<?= e(app_url('/admin/users')) ?>" class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-slate-700 hover:shadow-lg">Add shopkeeper</a>
             </div>
             <div class="mt-6 overflow-x-auto">
                 <table class="min-w-full text-left text-sm">
